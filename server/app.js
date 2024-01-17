@@ -73,52 +73,6 @@ app.get("/api/students/cohort/:cohortId", async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
-//  GET  api/students/:studentId by id
-app.get('/api/students:studentId', async (request, response) => {
-  const { studentId } = request.params
-  const oneStudent = await Student.findById(studentId)
-
-  response.json(oneStudent)
-})
-
-//  PUT  /api/students/:studentId route
-app.put('api/students/:studentId', async (request, response) => {
-  console.log(request.body)
-  const payload = request.body
-  try {
-    const updatedStudent = await Student.findByIdAndUpdate(request.params.studentId, payload, { new: true })
-    response.status(200).json(updatedStudent)
-  } catch (error) {
-    console.log(error)
-    response.status(500).json({ message: 'Something bad happened' })
-  }
-})
-
-//  DELETE  /api/students/:studentId route
-app.delete('api/students/:studentId', async (request, response) => {
-  const { studentId } = request.params
-  try {
-    const studentToDelete = await Student.findByIdAndDelete(studentId)
-    response.status(204).json({ message: `${studentToDelete.title} was remove from the db` })
-  } catch (error) {
-    console.log(error)
-    response.status(500).json({ message: 'Something bad happened' })
-  }
-})
-
-//  GET  /cohorts - Retrieve all books from the database
-app.get("/api/cohorts", (req, res) => {
-  Cohort.find({})
-    .then((cohorts) => {
-      console.log("Retrieved cohorts ->", cohorts);
-      res.json(cohorts);
-    })
-    .catch((error) => {
-      console.error("Error while retrieving cohorts ->", error);
-      res.status(500).send({ error: "Failed to retrieve cohorts" });
-    });
-=======
 //POST - /students
 app.post("/api/students", async (req, res) => {
   try {
@@ -126,6 +80,35 @@ app.post("/api/students", async (req, res) => {
     res.status(201).json(student);
   } catch (error) {
     console.log(error);
+  }
+});
+//PUT - /student
+app.put("api/students/:studentId", async (request, response) => {
+  console.log(request.body);
+  const payload = request.body;
+  try {
+    const updatedStudent = await Student.findByIdAndUpdate(
+      request.params.studentId,
+      payload,
+      { new: true }
+    );
+    response.status(200).json(updatedStudent);
+  } catch (error) {
+    console.log(error);
+    response.status(500).json({ message: "Something bad happened" });
+  }
+});
+//  DELETE  /api/students/:studentId route
+app.delete("api/students/:studentId", async (request, response) => {
+  const { studentId } = request.params;
+  try {
+    const studentToDelete = await Student.findByIdAndDelete(studentId);
+    response
+      .status(204)
+      .json({ message: `${studentToDelete.title} was remove from the db` });
+  } catch (error) {
+    console.log(error);
+    response.status(500).json({ message: "Something bad happened" });
   }
 });
 
@@ -160,44 +143,37 @@ app.post("/api/cohorts", async (req, res) => {
   } catch (error) {
     console.log(error);
   }
->>>>>>> d4cd0174efbc4b4268db87e3f300f4db91d48080
 });
 
-// GET /api/cohorts/:cohortId
-// Retrieves a specific cohort by id
-app.get('/api/cohorts/:cohortId', async (request, response) => {
-  const { cohortId } = request.params
-  const oneCohort = await Cohort.findById(cohortId)
-
-  response.json(oneCohort)
-})
-
-//  PUT /api/cohorts/:cohortId route
-app.put('/api/cohorts/:cohortId', async (request, response) => {
-  console.log(request.body)
-  const payload = request.body
+// PUT - /cohorts
+app.put("/api/cohorts/:cohortId", async (request, response) => {
+  console.log(request.body);
+  const payload = request.body;
   try {
-    const updatedCohort = await Cohort.findByIdAndUpdate(request.params.cohortId, payload, { new: true })
-    response.status(200).json(updatedCohort)
+    const updatedCohort = await Cohort.findByIdAndUpdate(
+      request.params.cohortId,
+      payload,
+      { new: true }
+    );
+    response.status(200).json(updatedCohort);
   } catch (error) {
-    console.log(error)
-    response.status(500).json({ message: 'Something bad happened' })
+    console.log(error);
+    response.status(500).json({ message: "Something bad happened" });
   }
-})
-
-//DELETE /api/cohorts/:cohortId
+});
 // Deletes a specific cohort by id
-app.delete('/api/cohorts/:cohortId ', async (request, response) => {
-  const { cohortId } = request.params
+app.delete("/api/cohorts/:cohortId ", async (request, response) => {
+  const { cohortId } = request.params;
   try {
-    const cohortToDelete = await Cohort.findByIdAndDelete(cohortId)
-    response.status(204).json({ message: `${cohortToDelete.title} was remove from the db` })
+    const cohortToDelete = await Cohort.findByIdAndDelete(cohortId);
+    response
+      .status(204)
+      .json({ message: `${cohortToDelete.title} was remove from the db` });
   } catch (error) {
-    console.log(error)
-    response.status(500).json({ message: 'Something bad happened' })
+    console.log(error);
+    response.status(500).json({ message: "Something bad happened" });
   }
-})
-
+});
 // START SERVER
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
