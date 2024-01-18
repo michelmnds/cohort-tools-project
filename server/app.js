@@ -83,7 +83,7 @@ app.post("/api/students", async (req, res) => {
   }
 });
 //PUT - /student
-app.put("api/students/:studentId", async (request, response) => {
+app.put("/api/students/:studentId", async (request, response) => {
   console.log(request.body);
   const payload = request.body;
   try {
@@ -99,7 +99,7 @@ app.put("api/students/:studentId", async (request, response) => {
   }
 });
 //  DELETE  /api/students/:studentId route
-app.delete("api/students/:studentId", async (request, response) => {
+app.delete("/api/students/:studentId", async (request, response) => {
   const { studentId } = request.params;
   try {
     const studentToDelete = await Student.findByIdAndDelete(studentId);
