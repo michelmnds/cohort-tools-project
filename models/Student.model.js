@@ -17,7 +17,7 @@ const studentSchema = new Schema({
   image: String,
   projects: [],
   /* cohort: ObjectId, */
-  cohort: [{ type: Schema.Types.ObjectId, ref: "Cohort" }],
+  cohort: { type: Schema.Types.ObjectId, ref: "Cohort" }
 });
 
 // CREATE MODEL
