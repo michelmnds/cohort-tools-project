@@ -7,6 +7,10 @@ const mongoose = require("mongoose");
 
 const Student = require("./models/Student.model");
 const Cohort = require("./models/Cohort.model");
+const {
+  errorHandler,
+  notFoundHandler,
+} = require("./middleware/error-handling");
 
 const PORT = 5005;
 
@@ -40,17 +44,17 @@ app.get("/docs", (req, res) => {
 });
 
 //  GET  /students
-app.get("/api/students", async (req, res) => {
+app.get("/api/students", async (req, res, next) => {
   try {
     const students = await Student.find().populate("cohort");
     console.log("Retrieved students ->", students);
     res.json(students);
   } catch (error) {
-    console.error("Error while retrieving students ->", error);
+    next(error);
     res.status(500).send({ error: "Failed to retrieve students" });
   }
 });
-app.get("/api/students/:studentId", async (req, res) => {
+app.get("/api/students/:studentId", async (req, res, next) => {
   const studentId = req.params.studentId;
 
   try {
@@ -58,28 +62,30 @@ app.get("/api/students/:studentId", async (req, res) => {
 
     res.status(200).json(student);
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 });
-app.get("/api/students/cohort/:cohortId", async (req, res) => {
+app.get("/api/students/cohort/:cohortId", async (req, res, next) => {
   const cohortId = req.params.cohortId;
 
   try {
-    const studentList = await Student.find({ cohort: cohortId }).populate("cohort");
+    const studentList = await Student.find({ cohort: cohortId }).populate(
+      "cohort"
+    );
 
     res.status(200).json(studentList);
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 });
 
 //POST - /students
-app.post("/api/students", async (req, res) => {
+app.post("/api/students", async (req, res, next) => {
   try {
     const student = await Student.create(req.body);
     res.status(201).json(student);
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 });
 //PUT - /student
@@ -94,7 +100,7 @@ app.put("/api/students/:studentId", async (request, response) => {
     );
     response.status(200).json(updatedStudent);
   } catch (error) {
-    console.log(error);
+    next(error);
     response.status(500).json({ message: "Something bad happened" });
   }
 });
@@ -107,22 +113,22 @@ app.delete("/api/students/:studentId", async (request, response) => {
       .status(204)
       .json({ message: `${studentToDelete.title} was remove from the db` });
   } catch (error) {
-    console.log(error);
+    next(error);
     response.status(500).json({ message: "Something bad happened" });
   }
 });
 
 //  GET - /cohorts
-app.get("/api/cohorts", async (req, res) => {
+app.get("/api/cohorts", async (req, res, next) => {
   try {
     const cohorts = await Cohort.find();
 
     res.status(200).json(cohorts);
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 });
-app.get("/api/cohorts/:cohortId", async (req, res) => {
+app.get("/api/cohorts/:cohortId", async (req, res, next) => {
   const cohortId = req.params.cohortId;
 
   try {
@@ -130,18 +136,18 @@ app.get("/api/cohorts/:cohortId", async (req, res) => {
 
     res.status(200).json(cohort);
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 });
 
 // POST - /cohorts
-app.post("/api/cohorts", async (req, res) => {
+app.post("/api/cohorts", async (req, res, next) => {
   try {
     const newCohort = await Cohort.create(req.body);
 
     res.status(201).json(newCohort);
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 });
 
@@ -157,7 +163,7 @@ app.put("/api/cohorts/:cohortId", async (request, response) => {
     );
     response.status(200).json(updatedCohort);
   } catch (error) {
-    console.log(error);
+    next(error);
     response.status(500).json({ message: "Something bad happened" });
   }
 });
@@ -170,10 +176,14 @@ app.delete("/api/cohorts/:cohortId ", async (request, response) => {
       .status(204)
       .json({ message: `${cohortToDelete.title} was remove from the db` });
   } catch (error) {
-    console.log(error);
+    next(error);
     response.status(500).json({ message: "Something bad happened" });
   }
 });
+
+app.use(errorHandler);
+app.use(notFoundHandler);
+
 // START SERVER
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
