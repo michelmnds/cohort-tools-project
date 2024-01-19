@@ -7,7 +7,7 @@ const router = require("express").Router();
 
 const SALT_ROUNDS = 13;
 
-router.post("/signup", async (req, res) => {
+router.post("/signup", async (req, res, next) => {
   const payload = req.body; // { email, password }
   // Hash the password
   const salt = bcrypt.genSaltSync(SALT_ROUNDS);
@@ -23,7 +23,7 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-router.post("/login", async (req, res) => {
+router.post("/login", async (req, res, next) => {
   const payload = req.body; // { email, password }
   try {
     const potentialUser = await User.findOne({
@@ -59,7 +59,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.get("/verify", isAuthenticated, async (req, res) => {
+router.get("/verify", isAuthenticated, async (req, res, next) => {
   console.log(req.tokenPayload);
   const currentUser = await User.findById(req.tokenPayload.userId);
   res.status(200).json(currentUser);

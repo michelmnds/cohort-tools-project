@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const { isAuthenticated } = require("../middleware/jwt.middleware");
 
 const Cohort = require("../models/Cohort.model");
 
@@ -26,7 +27,7 @@ router.get("/cohorts/:cohortId", async (req, res, next) => {
 });
 
 // POST - /cohorts
-router.post("/cohorts", async (req, res, next) => {
+router.post("/cohorts", isAuthenticated, async (req, res, next) => {
   try {
     const newCohort = await Cohort.create(req.body);
 
@@ -37,7 +38,7 @@ router.post("/cohorts", async (req, res, next) => {
 });
 
 // PUT - /cohorts
-router.put("/cohorts/:cohortId", async (request, response) => {
+router.put("/cohorts/:cohortId", isAuthenticated, async (request, response) => {
   console.log(request.body);
   const payload = request.body;
   try {
@@ -53,17 +54,21 @@ router.put("/cohorts/:cohortId", async (request, response) => {
   }
 });
 // Deletes a specific cohort by id
-router.delete("/cohorts/:cohortId", async (request, response) => {
-  const { cohortId } = request.params;
-  try {
-    const cohortToDelete = await Cohort.findByIdAndDelete(cohortId);
-    response
-      .status(204)
-      .json({ message: `${cohortToDelete.title} was remove from the db` });
-  } catch (error) {
-    next(error);
-    response.status(500).json({ message: "Something bad happened" });
+router.delete(
+  "/cohorts/:cohortId",
+  isAuthenticated,
+  async (request, response) => {
+    const { cohortId } = request.params;
+    try {
+      const cohortToDelete = await Cohort.findByIdAndDelete(cohortId);
+      response
+        .status(204)
+        .json({ message: `${cohortToDelete.title} was remove from the db` });
+    } catch (error) {
+      next(error);
+      response.status(500).json({ message: "Something bad happened" });
+    }
   }
-});
+);
 
 module.exports = router;
