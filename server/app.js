@@ -7,6 +7,10 @@ const mongoose = require("mongoose");
 
 const Student = require("./models/Student.model");
 const Cohort = require("./models/Cohort.model");
+
+const authRouter = require("./routes/auth.routes");
+app.use("/auth", authRouter);
+
 const {
   errorHandler,
   notFoundHandler,
