@@ -35,10 +35,10 @@ const docsRouter = require("./routes/docs.routes");
 app.use("/docs", docsRouter);
 
 const studentRouter = require("./routes/student.routes");
-app.use("/api", /* isAuthenticated */ studentRouter);
+app.use("/api", studentRouter);
 
 const cohortRouter = require("./routes/cohort.routes");
-app.use("/api", /* isAuthenticated */ cohortRouter);
+app.use("/api", cohortRouter);
 
 const authRouter = require("./routes/auth.routes");
 app.use("/auth", authRouter);
