@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const { isAuthenticated } = require("../middleware/jwt.middleware");
 
 const Student = require("../models/Student.model");
 
@@ -43,7 +42,7 @@ router.get("/students/cohort/:cohortId", async (req, res, next) => {
 });
 
 //POST - /students
-router.post("/students", isAuthenticated, async (req, res, next) => {
+router.post("/students", async (req, res, next) => {
   try {
     const student = await Student.create(req.body);
     res.status(201).json(student);
@@ -55,7 +54,6 @@ router.post("/students", isAuthenticated, async (req, res, next) => {
 //PUT - /student
 router.put(
   "/students/:studentId",
-  isAuthenticated,
   async (request, response) => {
     console.log(request.body);
     const payload = request.body;
@@ -75,7 +73,6 @@ router.put(
 //  DELETE  /students/:studentId route
 router.delete(
   "/students/:studentId",
-  isAuthenticated,
   async (request, response) => {
     const { studentId } = request.params;
     try {

@@ -44,7 +44,7 @@ router.post("/login", async (req, res, next) => {
             expiresIn: "6h",
           }
         );
-        res.status(200).json({ token: authToken });
+        res.status(200).json({ authToken: authToken });
       } else {
         // Incorrect password
         res.status(403).json({ message: "Incorrect password" });
