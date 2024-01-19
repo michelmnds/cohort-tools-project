@@ -2,23 +2,14 @@ const express = require("express");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const { errorHandler, notFoundHandler } = require("./middleware/error-handling");
 
 const mongoose = require("mongoose");
 
 const Student = require("./models/Student.model");
 const Cohort = require("./models/Cohort.model");
-const {
-  errorHandler,
-  notFoundHandler,
-} = require("./middleware/error-handling");
 
 const PORT = 5005;
-
-// STATIC DATA
-// Devs Team - Import the provided files with JSON data of students and cohorts here:
-// ...
-
-// INITIALIZE EXPRESS APP - https://expressjs.com/en/4x/api.html#express
 const app = express();
 
 mongoose
@@ -26,9 +17,9 @@ mongoose
   .then((x) => console.log(`Connected to Database: "${x.connections[0].name}"`))
   .catch((err) => console.error("Error connecting to MongoDB", err));
 
-// MIDDLEWARE
-// Research Team - Set up CORS middleware here:
-// ...
+const middlewares = []
+
+
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(express.static("public"));
@@ -36,9 +27,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 app.use(cookieParser());
 
-// ROUTES - https://expressjs.com/en/starter/basic-routing.html
-// Devs Team - Start working on the routes here:
-// ...
+
 app.get("/docs", (req, res) => {
   res.sendFile(__dirname + "/views/docs.html");
 });
