@@ -53,7 +53,7 @@ router.put("/cohorts/:cohortId", async (request, response) => {
   }
 });
 // Deletes a specific cohort by id
-router.delete("/cohorts/:cohortId ", async (request, response) => {
+router.delete("/cohorts/:cohortId", async (request, response) => {
   const { cohortId } = request.params;
   try {
     const cohortToDelete = await Cohort.findByIdAndDelete(cohortId);
