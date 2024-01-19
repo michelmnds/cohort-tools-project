@@ -18,6 +18,8 @@ const {
 
 const PORT = 5005;
 
+const { isAuthenticated } = require("./middleware/jwt.middleware");
+
 // STATIC DATA
 // Devs Team - Import the provided files with JSON data of students and cohorts here:
 // ...
